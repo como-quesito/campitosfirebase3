@@ -4,11 +4,15 @@ package org.servidor.firebase;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.gcm.server.Sender;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -54,17 +58,33 @@ public class ControladorRegistroMensajes {
     @RequestMapping(value="/enviar/{mensaje}", method= RequestMethod.GET,headers={"Accept=text/html"} )
     @ResponseBody
     public String enviarMensaje(@PathVariable String mensaje){
-        sender=new Sender(key);
-        String resultado="antes";
-        Clave clave=repoClave.findOne(10L);
-        Content c=new Content();
-        c.addRegId(clave.getToken());
-        c.createData("raton:",mensaje);
-        POST2GCM.post(key,c);
-        resultado="eviadooooooooo "+clave.getToken();
-        System.out.println(resultado);
 
-        return "mensaje enviado con exito"+clave.getToken();
+  Clave clave=repoClave.findOne(6L);
+
+        Mensaje mensa = new Mensaje();
+        mensa.setTo(clave.getToken());
+        Map<String,String> mapa=new HashMap<String, String>();
+        Data data =new Data();
+        data.setTitle("yo");
+        data.setBody(mensaje);
+        mensa.setData(data);
+// Set the Content-Type header
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.setContentType(new MediaType("application","json"));
+
+        //headers.add("Authorization:AIzaSyDhBeG0yER-PYaTnATRWRgFTLVZQqn8Nso");
+        requestHeaders.set("Authorization","key=AIzaSyDhBeG0yER-PYaTnATRWRgFTLVZQqn8Nso");
+
+        HttpEntity<Mensaje> requestEntity = new HttpEntity<Mensaje>(mensa, requestHeaders);
+
+// Create a new RestTemplate instance
+        RestTemplate restTemplate = new RestTemplate();
+
+// Make the HTTP POST request, marshaling the request to JSON, and the response to a String
+        ResponseEntity<String> responseEntity = restTemplate.exchange("https://fcm.googleapis.com/fcm/send", HttpMethod.POST, requestEntity, String.class);
+        String resultado = responseEntity.getBody();
+
+        return "mensaje enviado con exito"+resultado;
 
     }
 
