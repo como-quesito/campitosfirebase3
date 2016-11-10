@@ -35,7 +35,7 @@ public class ControladorRegistroMensajes {
     //un api de servidor, la cual es la siguiente para dicho proyecto
     String key= "AIzaSyDhBeG0yER-PYaTnATRWRgFTLVZQqn8Nso";
     private static final int MULTICAST_SIZE = 1000;
-    private Sender sender;
+   // private Sender sender;
     private static final Executor threadPool = Executors.newFixedThreadPool(5);
 
 
