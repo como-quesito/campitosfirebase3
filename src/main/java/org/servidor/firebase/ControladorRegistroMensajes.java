@@ -55,20 +55,21 @@ public class ControladorRegistroMensajes {
         return "registrado con exito";
     }
 
+    @CrossOrigin
     @RequestMapping(value="/enviar/{mensaje}", method= RequestMethod.GET,headers={"Accept=text/html"} )
     @ResponseBody
     public String enviarMensaje(@PathVariable String mensaje){
 
-  Clave clave=repoClave.findOne(6L);
+        Clave clave=repoClave.findOne(6L);
 
         Mensaje mensa = new Mensaje();
         mensa.setTo(clave.getToken());
-        Map<String,String> mapa=new HashMap<String, String>();
+        //Map<String,String> mapa=new HashMap<String, String>();
         Data data =new Data();
         data.setTitle("yo");
         data.setBody(mensaje);
         mensa.setData(data);
-// Set the Content-Type header
+// Ajustamos los headers
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(new MediaType("application","json"));
 
@@ -77,10 +78,10 @@ public class ControladorRegistroMensajes {
 
         HttpEntity<Mensaje> requestEntity = new HttpEntity<Mensaje>(mensa, requestHeaders);
 
-// Create a new RestTemplate instance
+// Creaamos un RestTemplate
         RestTemplate restTemplate = new RestTemplate();
 
-// Make the HTTP POST request, marshaling the request to JSON, and the response to a String
+// Mandamos al uri del servicio web comomo consumimos normalmente un servicio Rest
         ResponseEntity<String> responseEntity = restTemplate.exchange("https://fcm.googleapis.com/fcm/send", HttpMethod.POST, requestEntity, String.class);
         String resultado = responseEntity.getBody();
 
