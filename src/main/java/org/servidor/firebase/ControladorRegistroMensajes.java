@@ -108,15 +108,30 @@ public class ControladorRegistroMensajes {
     @RequestMapping(value="/mensa", method= RequestMethod.GET,headers={"Accept=application/json"} )
     @ResponseBody
     public String mensa()throws Exception{
-        Mensa mensa1=new Mensa("uno","Primer mensaje");
+        Mensa mensa1=new Mensa("uno","Quiero quesito!");
         Mensa mensa2=new Mensa("dos","eres una mensa dos")  ;
     Mensa mensa3=new Mensa("tres","Voy a comer")  ;
+    Mensa mensa4=new Mensa("cuatro", "Quier mi qeusito");
         ObjectMapper maper=new ObjectMapper();
     List lista=new ArrayList<>();
     lista=Arrays.asList(mensa1,mensa2,mensa3);
         return   maper.writeValueAsString(lista);
 
 
+    }
+
+    @CrossOrigin
+    @RequestMapping(value="/mensa", method= RequestMethod.POST, headers={"Accept=application/json"})
+    @ResponseBody
+    String postPensa(@RequestBody String json)throws Exception{
+        ObjectMapper mapper=new ObjectMapper();
+        System.out.println("Registrado con exito");
+        String resultado="nada";
+        //convertimos jsonsito a un RegistroMensajeria, que asi se supone vienen :)
+        Mensa registro = mapper.readValue(json,Mensa.class );
+      //  repoClave.save(registro);
+        System.out.println("Registrado con exito"+registro.getTitulo()+ " y "+registro.getCuerpo());
+        return "registrado con exito";
     }
 
 
