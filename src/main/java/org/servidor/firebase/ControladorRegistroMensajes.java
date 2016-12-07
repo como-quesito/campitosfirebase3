@@ -11,8 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.lang.reflect.Array;
+import java.util.*;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -99,6 +99,32 @@ public class ControladorRegistroMensajes {
         mensa.setData(noti);
   ObjectMapper maper=new ObjectMapper();
       return   maper.writeValueAsString(mensa);
+
+
+    }
+
+@CrossOrigin
+    @RequestMapping(value="/mensa", method= RequestMethod.GET,headers={"Accept=application/json"} )
+    @ResponseBody
+    public String mensa()throws Exception{
+        Mensa mensa1=new Mensa("uno","Primer mensaje");
+        Mensa mensa2=new Mensa("dos","eres una mensa dos")  ;
+    Mensa mensa3=new Mensa("tres","Voy a comer")  ;
+        ObjectMapper maper=new ObjectMapper();
+    List lista=new ArrayList<>();
+    lista=Arrays.asList(mensa1,mensa2,mensa3);
+        return   maper.writeValueAsString(lista);
+
+
+    }
+
+
+    @CrossOrigin
+    @RequestMapping(value="/prueba", method= RequestMethod.GET,headers={"Accept=text/html"} )
+    @ResponseBody
+    public String prueba()throws Exception{
+    System.out.println("se accedio");
+    return "Esta es una pruebita";
 
 
     }
