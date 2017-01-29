@@ -140,7 +140,7 @@ public class ControladorRegistroMensajes {
     @ResponseBody
     public String prueba()throws Exception{
     System.out.println("se accedio");
-    return "Esta es una pruebita";
+    return "Esta es una pruebita simple";
 
 
     }
